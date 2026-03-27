@@ -2,11 +2,22 @@ import React from "react";
 import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 
+import img1 from "@/images/1.png";
+import img2 from "@/images/2.png";
+import img3 from "@/images/3.png";
+import img4 from "@/images/4.png";
+import img5 from "@/images/5.png";
+import img6 from "@/images/6.png";
+import img7 from "@/images/7.png";
+import img8 from "@/images/8.png";
+import img9 from "@/images/9.png";
+
+const flyerImages = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
+
 export default function FlyersSection() {
-  // Dynamically load all 9 uploaded promotional flyers
-  const flyers = Array.from({ length: 9 }, (_, i) => ({
+  const flyers = flyerImages.map((src, i) => ({
     id: i + 1,
-    src: `/flyers/${i + 1}.png`,
+    src,
     alt: `Promotional Flyer ${i + 1}`,
   }));
 
@@ -37,11 +48,6 @@ export default function FlyersSection() {
                     src={flyer.src}
                     alt={flyer.alt}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    onError={(e) => {
-                      // Fallback if image not yet placed in public folder
-                      e.currentTarget.onerror = null; 
-                      e.currentTarget.src = "https://images.unsplash.com/photo-1562564055-71e051d33c19?w=500&q=80";
-                    }}
                   />
                   <div className="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/10 transition-colors duration-300" />
                 </div>

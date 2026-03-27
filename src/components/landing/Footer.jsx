@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp, Instagram, Facebook, MessageCircle } from "lucide-react";
+import niLogo from "../../images/logo.png";
 
 const footerServices = [
   "CCTV Camera Systems", "Door Access Control", "Digital Attendance Systems",
@@ -33,7 +34,7 @@ export default function Footer({ onTerms, onPrivacy }) {
           {/* Col 1: Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-5">
-              <img src="/logo.png" alt="NI Logo" className="w-12 h-12 object-contain bg-white rounded-xl p-1 flex-shrink-0" />
+              <img src={niLogo} alt="NI Logo" className="w-12 h-12 object-contain bg-white rounded-xl p-1 flex-shrink-0" />
               <div>
                 <p className="text-sm font-bold text-white leading-tight">NI For Office Equipment</p>
                 <p className="text-sm font-bold text-white leading-tight">Trading Co. LLC</p>

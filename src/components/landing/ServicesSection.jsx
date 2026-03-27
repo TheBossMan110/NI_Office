@@ -56,7 +56,7 @@ const services = [
     title: "Toner & Ink Cartridge Supply",
     description: "Genuine and compatible toner and ink cartridges for all major printer brands. Bulk ordering, subscription supply, and fast delivery across Dubai and the UAE.",
     features: ["HP • Canon • Epson", "Brother • Ricoh", "Bulk Discounts", "Fast UAE Delivery", "Genuine Products"],
-    image: "https://images.unsplash.com/photo-1612815292201-39b59c37ff74?w=600&q=85",
+    image: "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=600&q=85",
     cta: "Order Now →",
     gradient: "from-amber-500/8 to-orange-500/8",
     border: "border-amber-100",
@@ -86,6 +86,18 @@ const services = [
     border: "border-emerald-100",
     hover: "hover:border-emerald-300",
     tag: "bg-emerald-600",
+  },
+  {
+    emoji: "✂️",
+    title: "Laser Cutting Services",
+    description: "Precision laser cutting for custom signage, acrylic displays, branding elements, engraved plaques, and decorative panels — tailored to your exact specifications with fast turnaround.",
+    features: ["Acrylic Cutting", "Wood & MDF", "Custom Signage", "Engraving", "Branding Elements"],
+    image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=85",
+    cta: "Get a Quote →",
+    gradient: "from-orange-500/8 to-red-500/8",
+    border: "border-orange-100",
+    hover: "hover:border-orange-300",
+    tag: "bg-orange-600",
   },
 ];
 

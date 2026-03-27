@@ -9,7 +9,7 @@ const products = [
   },
   {
     caption: "Printer Toner Cartridges",
-    image: "https://images.unsplash.com/photo-1612815292201-39b59c37ff74?w=700&q=85",
+    image: "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=700&q=85",
   },
   {
     caption: "Office Printer / Copier",

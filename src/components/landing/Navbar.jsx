@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import niLogo from "../../images/logo.png";
 
 const navLinks = [
   { label: "Home", href: "#hero" },
@@ -42,7 +43,7 @@ export default function Navbar({ onTerms, onPrivacy }) {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
           <button onClick={() => scrollTo("#hero")} className="flex items-center gap-3 text-left">
-            <img src="/logo.png" alt="NI Logo" className="w-12 h-12 object-contain" />
+            <img src={niLogo} alt="NI Logo" className="w-12 h-12 object-contain" />
             <div className="hidden sm:block">
               <p className="text-sm font-bold text-gray-900 leading-tight">NI For Office Equipment</p>
               <p className="text-sm font-bold text-gray-900 leading-tight">Trading Co. LLC</p>

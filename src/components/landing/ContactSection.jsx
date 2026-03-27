@@ -1,41 +1,148 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Send, MapPin, Phone, Mail, Instagram, Facebook, ArrowUpRight, MessageCircle, CheckCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, MapPin, Phone, Mail, Instagram, Facebook, ArrowUpRight, MessageCircle, CheckCircle, XCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ScrollReveal from "./ScrollReveal";
-import { toast } from "sonner";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: "", company: "", email: "", phone: "", service: "", message: "",
   });
   const [sending, setSending] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [popup, setPopup] = useState({ show: false, type: null, message: "" }); // type: "success" | "error"
+
+  const showPopup = (type, message) => {
+    setPopup({ show: true, type, message });
+  };
+
+  const closePopup = () => {
+    setPopup({ show: false, type: null, message: "" });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Manual validation (Radix Select doesn't support native required)
+    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
+      showPopup("error", "Please fill in all required fields (Name, Email, Phone).");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      showPopup("error", "Please enter a valid email address.");
+      return;
+    }
+
     setSending(true);
-    await new Promise((r) => setTimeout(r, 1500));
-    setSending(false);
-    setSuccess(true);
-    toast.success("Message sent! We'll be in touch within 24 hours.");
-    setFormData({ name: "", company: "", email: "", phone: "", service: "", message: "" });
-    setTimeout(() => setSuccess(false), 6000);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        showPopup("success", "Your message has been sent successfully! We'll get back to you within 24 hours.");
+        setFormData({ name: "", company: "", email: "", phone: "", service: "", message: "" });
+      } else {
+        showPopup("error", data.error || "Something went wrong. Please try again.");
+      }
+    } catch (err) {
+      showPopup("error", "Connection error. Please check your internet and try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
-    const contactDetails = [
-      { Icon: MapPin, label: "Location", value: "Dubai, United Arab Emirates", href: null },
-      { Icon: Phone, label: "Phone", value: "+971 55 856 0495 / +971 56 9123171", href: "tel:+971558560495" },
-      { Icon: MessageCircle, label: "WhatsApp", value: "+971 55 856 0495", href: "https://wa.me/971558560495" },
-      { Icon: Mail, label: "Email", value: "marketing.niofficedxb@gmail.com", href: "mailto:marketing.niofficedxb@gmail.com" },
-    ];
+  const contactDetails = [
+    { Icon: MapPin, label: "Location", value: "Dubai, United Arab Emirates", href: null },
+    { Icon: Phone, label: "Phone", value: "+971 55 856 0495 / +971 56 9123171", href: "tel:+971558560495" },
+    { Icon: MessageCircle, label: "WhatsApp", value: "+971 55 856 0495", href: "https://wa.me/971558560495" },
+    { Icon: Mail, label: "Email", value: "marketing.niofficedxb@gmail.com", href: "mailto:marketing.niofficedxb@gmail.com" },
+  ];
 
   return (
     <section id="contact" className="relative py-28 overflow-hidden bg-gradient-to-b from-white via-blue-50/20 to-white">
       <div className="section-divider absolute top-0 left-0 right-0" />
+
+      {/* ──── Popup Modal ──── */}
+      <AnimatePresence>
+        {popup.show && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+            onClick={closePopup}
+          >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.85, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative bg-white rounded-3xl shadow-2xl p-8 sm:p-10 max-w-md w-full text-center"
+            >
+              {/* Close button */}
+              <button onClick={closePopup} className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 transition-colors">
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
+
+              {/* Icon */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 250, damping: 18, delay: 0.1 }}
+                className={`w-20 h-20 rounded-full mx-auto mb-5 flex items-center justify-center ${
+                  popup.type === "success"
+                    ? "bg-gradient-to-br from-emerald-400 to-green-500 shadow-lg shadow-green-200"
+                    : "bg-gradient-to-br from-red-400 to-rose-500 shadow-lg shadow-red-200"
+                }`}
+              >
+                {popup.type === "success" ? (
+                  <CheckCircle className="w-10 h-10 text-white" />
+                ) : (
+                  <XCircle className="w-10 h-10 text-white" />
+                )}
+              </motion.div>
+
+              {/* Title */}
+              <h3 className="text-2xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                {popup.type === "success" ? "Message Sent! ✉️" : "Oops! Something Went Wrong"}
+              </h3>
+
+              {/* Message */}
+              <p className="text-gray-500 leading-relaxed mb-6">
+                {popup.message}
+              </p>
+
+              {/* Action button */}
+              <Button
+                onClick={closePopup}
+                className={`px-8 py-3 rounded-xl font-semibold text-white transition-all ${
+                  popup.type === "success"
+                    ? "bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200"
+                    : "bg-rose-500 hover:bg-rose-600 shadow-rose-200"
+                } shadow-lg`}
+              >
+                {popup.type === "success" ? "Got it!" : "Try Again"}
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="relative max-w-7xl mx-auto px-6">
         <ScrollReveal className="text-center mb-16">
@@ -53,31 +160,11 @@ export default function ContactSection() {
           {/* Form */}
           <ScrollReveal className="lg:col-span-3">
             <div className="relative rounded-3xl border border-gray-100 bg-white shadow-soft-lg p-8 sm:p-10 overflow-hidden">
-              {/* Success overlay */}
-              {success && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="absolute inset-0 bg-white/95 flex flex-col items-center justify-center gap-4 z-10 rounded-3xl"
-                >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                    className="w-20 h-20 rounded-full bg-green-500 flex items-center justify-center"
-                  >
-                    <CheckCircle className="w-10 h-10 text-white" />
-                  </motion.div>
-                  <p className="text-xl font-bold text-gray-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Message Sent!</p>
-                  <p className="text-gray-500 text-center max-w-xs">Thank you! We'll be in touch within 24 hours.</p>
-                </motion.div>
-              )}
-
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700">Full Name *</label>
-                    <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="John Smith" className="bg-gray-50 border-gray-200 h-12 rounded-xl focus:border-blue-400" />
                   </div>
                   <div className="space-y-1.5">
@@ -89,30 +176,31 @@ export default function ContactSection() {
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700">Phone Number *</label>
-                    <Input required value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    <Input value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+971 50 000 0000" className="bg-gray-50 border-gray-200 h-12 rounded-xl" />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-gray-700">Email Address *</label>
-                    <Input required type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    <Input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="john@company.com" className="bg-gray-50 border-gray-200 h-12 rounded-xl focus:border-blue-400" />
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700">Service Required *</label>
-                  <Select required value={formData.service} onValueChange={(v) => setFormData({ ...formData, service: v })}>
+                  <label className="text-sm font-medium text-gray-700">Service Required</label>
+                  <Select value={formData.service} onValueChange={(v) => setFormData({ ...formData, service: v })}>
                     <SelectTrigger className="bg-gray-50 border-gray-200 h-12 rounded-xl">
                       <SelectValue placeholder="Select a service" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="cctv">CCTV Camera Systems</SelectItem>
-                      <SelectItem value="access">Door Access Control</SelectItem>
-                      <SelectItem value="attendance">Digital Attendance System</SelectItem>
-                      <SelectItem value="printers">Printers & Office Equipment</SelectItem>
-                      <SelectItem value="toner">Toner & Ink Supply</SelectItem>
-                      <SelectItem value="stationery">Stationery & Office Supplies</SelectItem>
-                      <SelectItem value="installation">Installation / Repair / Maintenance</SelectItem>
-                      <SelectItem value="general">General Enquiry</SelectItem>
+                      <SelectItem value="CCTV Camera Systems">CCTV Camera Systems</SelectItem>
+                      <SelectItem value="Door Access Control">Door Access Control</SelectItem>
+                      <SelectItem value="Digital Attendance System">Digital Attendance System</SelectItem>
+                      <SelectItem value="Printers & Office Equipment">Printers & Office Equipment</SelectItem>
+                      <SelectItem value="Toner & Ink Supply">Toner & Ink Supply</SelectItem>
+                      <SelectItem value="Stationery & Office Supplies">Stationery & Office Supplies</SelectItem>
+                      <SelectItem value="Installation / Repair / Maintenance">Installation / Repair / Maintenance</SelectItem>
+                      <SelectItem value="Laser Cutting Services">Laser Cutting Services</SelectItem>
+                      <SelectItem value="General Enquiry">General Enquiry</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -124,7 +212,10 @@ export default function ContactSection() {
                 <Button type="submit" disabled={sending}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-13 py-4 text-base font-semibold group shadow-blue transition-all">
                   {sending ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="flex items-center gap-3">
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Sending...</span>
+                    </div>
                   ) : (
                     <>
                       Request a Free Quote
