@@ -64,9 +64,11 @@ export default function ContactSection() {
 
   const contactDetails = [
     { Icon: MapPin, label: "Location", value: "Dubai, United Arab Emirates", href: null },
-    { Icon: Phone, label: "Phone", value: "+971 55 856 0495 / +971 56 9123171", href: "tel:+971558560495" },
+    { Icon: Phone, label: "Mobile", value: "+971 55 856 0495 / +971 56 9123171", href: "tel:+971558560495" },
+    { Icon: Phone, label: "Office Phone", value: "00971 4 259 7763", href: "tel:+97142597763" },
     { Icon: MessageCircle, label: "WhatsApp", value: "+971 55 856 0495", href: "https://wa.me/971558560495" },
-    { Icon: Mail, label: "Email", value: "marketing.niofficedxb@gmail.com", href: "mailto:marketing.niofficedxb@gmail.com" },
+    { Icon: MessageCircle, label: "WhatsApp", value: "+971 56 9123171", href: "https://wa.me/971569123171" },
+    { Icon: Mail, label: "Email", value: "info@nioffice.com", href: "mailto:info@nioffice.com" },
   ];
 
   return (
@@ -229,11 +231,11 @@ export default function ContactSection() {
 
           {/* Contact info */}
           <ScrollReveal delay={0.2} className="lg:col-span-2 space-y-5">
-            <div className="rounded-2xl border border-gray-100 bg-white p-7 shadow-soft space-y-5">
-              <h3 className="text-lg font-bold text-gray-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Contact Information</h3>
-              {contactDetails.map(({ Icon, label, value, href }) => {
+            <div className="rounded-2xl border border-gray-100 bg-white p-7 shadow-soft space-y-1">
+              <h3 className="text-lg font-bold text-gray-900 mb-4" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Contact Information</h3>
+              {contactDetails.map(({ Icon, label, value, href }, idx) => {
                 const content = (
-                  <div className="flex items-start gap-4 group">
+                  <div className="flex items-start gap-4 group py-3">
                     <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 transition-colors">
                       <Icon className="w-4 h-4 text-blue-600 group-hover:text-white transition-colors" />
                     </div>
@@ -244,15 +246,15 @@ export default function ContactSection() {
                   </div>
                 );
                 return href ? (
-                  <a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
+                  <a key={`${label}-${idx}`} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="block border-b border-gray-50 last:border-0">
                     {content}
                   </a>
                 ) : (
-                  <div key={label}>{content}</div>
+                  <div key={`${label}-${idx}`} className="border-b border-gray-50 last:border-0">{content}</div>
                 );
               })}
-              <div className="pt-2 text-sm text-gray-400">
-                🕐 Sun–Thu: 9:00 AM – 6:00 PM
+              <div className="pt-3 text-sm text-gray-500 font-medium">
+                🕐 Mon – Sat: 9:00 AM – 8:00 PM
               </div>
             </div>
 
@@ -262,7 +264,7 @@ export default function ContactSection() {
               <div className="flex flex-col gap-3">
                 {[
                   { Icon: Instagram, label: "Instagram", href: "https://instagram.com/ni.offices" },
-                  { Icon: Facebook, label: "Facebook", href: "https://facebook.com/NIOffices" },
+                  { Icon: Facebook, label: "Facebook", href: "https://www.facebook.com/people/NI-Offices/61570202446854/" },
                 ].map(({ Icon, label, href }) => (
                   <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-3 px-5 py-3 rounded-xl border border-gray-100 hover:bg-blue-50 hover:border-blue-200 transition-colors group">

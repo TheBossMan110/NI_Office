@@ -136,7 +136,10 @@ function ServiceCard({ s, index }) {
             ))}
           </div>
 
-          <button className="text-sm font-semibold text-blue-600 hover:text-blue-700 text-left group-hover:translate-x-1 transition-transform inline-flex items-center">
+          <button
+            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+            className="text-sm font-semibold text-blue-600 hover:text-blue-700 text-left group-hover:translate-x-1 transition-transform inline-flex items-center"
+          >
             {s.cta}
           </button>
         </div>
