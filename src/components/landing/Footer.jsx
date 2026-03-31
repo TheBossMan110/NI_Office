@@ -108,15 +108,18 @@ export default function Footer({ onTerms, onPrivacy }) {
                   <a href="tel:+971569123171" className="text-sm text-gray-400 hover:text-white transition-colors pl-5">
                     +971 56 9123171
                   </a>
+                  <a href="tel:+97142597763" className="text-sm text-gray-400 hover:text-white transition-colors pl-5">
+                    +971 4 2597763
+                  </a>
                 </div>
               </li>
               <li>
-                <a href="mailto:marketing.niofficedxb@gmail.com" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  <span className="text-blue-400">📧</span> marketing.niofficedxb@gmail.com
+                <a href="mailto:info@nioffice.com" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <span className="text-blue-400">📧</span> info@nioffice.com
                 </a>
               </li>
               <li className="text-sm text-gray-400">
-                <span className="text-blue-400">🕐</span> Sun–Thu: 9:00 AM – 6:00 PM
+                <span className="text-blue-400">🕐</span> Mon-Sat: 9:00 AM – 8:00 PM
               </li>
             </ul>
           </div>
